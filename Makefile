@@ -3,7 +3,7 @@
 default:
 	git add --all
 	git commit -m "Remote update"
-	git push -u origin master
+	git push -u origin main
 
 local:
 	git add --all
