@@ -33,7 +33,7 @@ def plot_x3p(surface, z_scale=1):
     x = np.arange(nx) * dx #create evenly spaced 1D array, mult by dx to form physical values
     y = np.arange(ny) * dy
 
-    X, Y = np.meshgrid(x, y) #determine (Xij,Yij,Zij)
+    X, Y = np.meshgrid(x, y) #create 2D coordinate arrays from 1D 
 
     grid = pv.StructuredGrid(X, Y, display_data)
 
@@ -44,20 +44,20 @@ def plot_x3p(surface, z_scale=1):
         grid,#contain surface geo(look above)
         scalars=data.ravel(order="F"),#values for coloring using Fortran ordering
         cmap="viridis",#color map
-        show_edges=False,#dont show ever outline
+        show_edges=False,#dont show every outline
         scalar_bar_args={"title": "Surface Height"}#color height bar
     )
     
       
     def update_z_scale(value):
       new_z = data * value #updated zval. in ner array
-      grid.points[:, 2] = new_z.ravel(order="F")#[every point, column]
+      grid.points[:, 2] = new_z.ravel(order="F")#[every point, column Z]
   
       
       #use 8 points to continuously update the box outline
       outline.points[0:4,2] = new_z.min()#bottom 4 points since shape is (8,3)
       outline.points[4:8,2] = new_z.max()#top 4 points
-      plotter.remove_bounds_axes()
+      plotter.remove_bounds_axes() #remove box to reset 
       plotter.show_bounds(mesh=grid,xtitle="X(m)",
       ytitle="Y(m)",ztitle="Z(scaled)",
       fmt="%.0e")
